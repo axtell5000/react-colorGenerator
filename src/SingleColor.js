@@ -8,11 +8,26 @@ const SingleColor = ({ rgb, weight, index, hexColor }) => {
   // const hex = rgbToHex(...rgb);
   const bcg = rgb.join(',');
   const hexValue = `#${hexColor}`;
+
+  // useEffect - to do something everytime the alert property changes, plus the cleanout where we are clearing timeout
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setAlert(false)
+    }, 3000)
+    return () => clearTimeout(timeout)
+  }, [alert]);
   
   return (
-    <article className={`color ${index > 10 && 'color-light'}`} style={{ backgroundColor: `rgb(${bcg})` }}>
+    <article 
+      className={`color ${index > 10 && 'color-light'}`} 
+      style={{ backgroundColor: `rgb(${bcg})` }}
+      onClick={() => {
+        setAlert(true)
+        navigator.clipboard.writeText(hexValue)
+      }}>
       <p className='percent-value'>{weight}%</p>
       <p className='color-value'>{hexValue}</p>
+      {alert && <p className='alert'>copied to clipboard</p>}
     </article>
   );
 }
